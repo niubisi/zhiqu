@@ -1,0 +1,1166 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>职趣网 - iPad跨界社区</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        * { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+        
+        .category-item {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .category-item:hover {
+            background: rgba(99, 102, 241, 0.08);
+            transform: translateX(2px);
+        }
+        
+        .category-item.active {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            color: white;
+            box-shadow: 0 4px 16px rgba(99, 102, 241, 0.3);
+        }
+        
+        .content-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .content-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+        }
+        
+        .feed-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 20px;
+        }
+        
+        .ranking-badge {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 12px;
+            border: 2px solid white;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        }
+        
+        .floating-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 50;
+            transition: all 0.3s ease;
+        }
+        
+        .floating-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
+        }
+        
+        .avatar-ring {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .avatar-ring::after {
+            content: '';
+            position: absolute;
+            inset: -3px;
+            border-radius: inherit;
+            padding: 3px;
+            background: linear-gradient(45deg, #6366f1, #8b5cf6, #ec4899);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask-composite: xor;
+            animation: rotate 3s linear infinite;
+        }
+        
+        @keyframes rotate {
+            to { transform: rotate(360deg); }
+        }
+        
+        .trend-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .trend-hot {
+            background: linear-gradient(135deg, #ff6b6b, #ff8e53);
+            color: white;
+        }
+        
+        .trend-up {
+            background: linear-gradient(135deg, #4ecdc4, #44a08d);
+            color: white;
+        }
+        
+        .trend-new {
+            background: linear-gradient(135deg, #a8edea, #fed6e3);
+            color: #374151;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-100 h-screen overflow-hidden">
+    <!-- 顶部导航栏 -->
+    <div class="h-16 bg-white/85 backdrop-blur-xl flex justify-between items-center px-6 border-b border-gray-200/50 shadow-sm">
+        <div class="flex items-center gap-10">
+            <!-- Logo区域 -->
+            <div class="flex items-center gap-3 min-w-fit">
+                <div class="w-9 h-9 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-xl flex items-center justify-center shadow-lg">
+                    <i class="fas fa-graduation-cap text-white text-sm"></i>
+                </div>
+                <h1 class="text-xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent whitespace-nowrap">职趣网</h1>
+            </div>
+            
+            <!-- 导航菜单 -->
+            <nav class="flex items-center gap-4">
+                <a href="ipad-mentorship.html" class="px-4 py-2 text-gray-600 hover:text-indigo-600 font-medium transition-all duration-200 hover:bg-indigo-50 rounded-lg whitespace-nowrap text-sm min-w-[64px] text-center">师傅弟子</a>
+                <a href="ipad-community.html" class="px-4 py-2 text-indigo-600 font-semibold bg-indigo-50 border-b-2 border-indigo-600 rounded-lg whitespace-nowrap text-sm min-w-[64px] text-center">跨界社区</a>
+                <a href="ipad-growth-map.html" class="px-4 py-2 text-gray-600 hover:text-indigo-600 font-medium transition-all duration-200 hover:bg-indigo-50 rounded-lg whitespace-nowrap text-sm min-w-[64px] text-center">技能进阶</a>
+                <a href="ipad-anonymous-qa.html" class="px-4 py-2 text-gray-600 hover:text-indigo-600 font-medium transition-all duration-200 hover:bg-indigo-50 rounded-lg whitespace-nowrap text-sm min-w-[64px] text-center">知识问答</a>
+            </nav>
+        </div>
+        
+        <!-- 右侧功能区 -->
+        <div class="flex items-center gap-3">
+            <div class="relative">
+                <input type="text" placeholder="搜索神奇配对..." 
+                       class="w-72 h-9 pl-9 pr-4 rounded-lg bg-gray-100/90 border-0 focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:bg-white text-sm transition-all placeholder-gray-500">
+                <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm"></i>
+            </div>
+            <button class="w-9 h-9 bg-gray-100/90 rounded-lg flex items-center justify-center hover:bg-gray-200/90 transition-colors">
+                <i class="fas fa-filter text-gray-600 text-sm"></i>
+            </button>
+            <div class="w-9 h-9 rounded-lg overflow-hidden border-2 border-indigo-200 shadow-sm">
+                <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=36&h=36&fit=crop&crop=face" 
+                     class="w-full h-full object-cover">
+            </div>
+        </div>
+    </div>
+
+    <!-- 主要内容区域 -->
+    <div class="flex h-full">
+        <!-- 左侧导航栏 -->
+        <div class="w-80 bg-white/60 backdrop-blur-xl border-r border-gray-100 p-6">
+            <!-- 热门分类 -->
+            <div class="mb-8">
+                <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
+                    <i class="fas fa-fire text-orange-500"></i>
+                    热门分类
+                </h3>
+                <div class="space-y-3">
+                    <div class="category-item active p-4 rounded-2xl">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 bg-white/30 rounded-xl flex items-center justify-center">
+                                <i class="fas fa-star text-white"></i>
+                            </div>
+                            <div>
+                                <div class="font-semibold text-white">惊喜配对</div>
+                                <div class="text-xs text-white/80">最受欢迎</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="category-item p-4 rounded-2xl bg-white/50">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 bg-gradient-to-r from-orange-500 to-red-500 rounded-xl flex items-center justify-center">
+                                <i class="fas fa-fire text-white"></i>
+                            </div>
+                            <div>
+                                <div class="font-semibold text-gray-800">热门话题</div>
+                                <div class="text-xs text-gray-600">讨论最多</div>
+                            </div>
+                            <div class="ml-auto bg-orange-100 text-orange-600 px-2 py-1 rounded-full text-xs font-medium">892</div>
+                        </div>
+                    </div>
+                    
+                    <div class="category-item p-4 rounded-2xl bg-white/50">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-xl flex items-center justify-center">
+                                <i class="fas fa-lightbulb text-white"></i>
+                            </div>
+                            <div>
+                                <div class="font-semibold text-gray-800">灵感分享</div>
+                                <div class="text-xs text-gray-600">创意无限</div>
+                            </div>
+                            <div class="ml-auto bg-blue-100 text-blue-600 px-2 py-1 rounded-full text-xs font-medium">456</div>
+                        </div>
+                    </div>
+                    
+                    <div class="category-item p-4 rounded-2xl bg-white/50">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 bg-gradient-to-r from-green-500 to-emerald-500 rounded-xl flex items-center justify-center">
+                                <i class="fas fa-camera text-white"></i>
+                            </div>
+                            <div>
+                                <div class="font-semibold text-gray-800">精彩瞬间</div>
+                                <div class="text-xs text-gray-600">记录美好</div>
+                            </div>
+                            <div class="ml-auto bg-green-100 text-green-600 px-2 py-1 rounded-full text-xs font-medium">234</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 配对排行榜 -->
+            <div class="mb-8">
+                <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
+                    <i class="fas fa-trophy text-yellow-500"></i>
+                    配对榜
+                </h3>
+                <div class="space-y-3">
+                    <div class="glass-card rounded-2xl p-4 relative">
+                        <div class="ranking-badge bg-gradient-to-r from-yellow-400 to-orange-500 text-white absolute -top-3 -left-3">1</div>
+                        <div class="flex items-center gap-3">
+                            <div class="flex items-center gap-2">
+                                <img src="https://images.unsplash.com/photo-1511367461989-f85a21fda167?w=50&h=50&fit=crop&crop=face" 
+                                     class="w-8 h-8 rounded-full object-cover border border-yellow-400" alt="歌手头像">
+                                <span class="text-gray-400 text-xs">×</span>
+                                <img src="https://images.unsplash.com/photo-1582750433449-648ed127bb54?w=50&h=50&fit=crop&crop=face" 
+                                     class="w-8 h-8 rounded-full object-cover border border-orange-400" alt="面包师头像">
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <div class="text-sm font-bold text-gray-800 truncate">歌手 × 面包师</div>
+                                <div class="text-xs text-gray-500">2.1k 浏览</div>
+                            </div>
+                            <div class="trend-badge trend-hot">
+                                <i class="fas fa-arrow-up"></i>
+                                热门
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="glass-card rounded-2xl p-4 relative">
+                        <div class="ranking-badge bg-gradient-to-r from-gray-400 to-gray-600 text-white absolute -top-3 -left-3">2</div>
+                        <div class="flex items-center gap-3">
+                            <div class="flex items-center gap-2">
+                                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=32&h=32&fit=crop&crop=face" 
+                                     class="w-8 h-8 rounded-full object-cover" alt="律师头像">
+                                <span class="text-gray-400 text-xs">×</span>
+                                <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=32&h=32&fit=crop&crop=face" 
+                                     class="w-8 h-8 rounded-full object-cover" alt="花艺师头像">
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <div class="text-sm font-bold text-gray-800 truncate">律师 × 花艺师</div>
+                                <div class="text-xs text-gray-500">1.8k 浏览</div>
+                            </div>
+                            <div class="trend-badge trend-up">
+                                <i class="fas fa-arrow-up"></i>
+                                上升
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="glass-card rounded-2xl p-4 relative">
+                        <div class="ranking-badge bg-gradient-to-r from-orange-400 to-red-500 text-white absolute -top-3 -left-3">3</div>
+                        <div class="flex items-center gap-3">
+                            <div class="flex items-center gap-2">
+                                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=32&h=32&fit=crop&crop=face" 
+                                     class="w-8 h-8 rounded-full object-cover" alt="咖啡师头像">
+                                <span class="text-gray-400 text-xs">×</span>
+                                <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=32&h=32&fit=crop&crop=face" 
+                                     class="w-8 h-8 rounded-full object-cover" alt="程序员头像">
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <div class="text-sm font-bold text-gray-800 truncate">咖啡师 × 程序员</div>
+                                <div class="text-xs text-gray-500">1.5k 浏览</div>
+                            </div>
+                            <div class="trend-badge trend-new">
+                                <i class="fas fa-star"></i>
+                                新星
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="glass-card rounded-2xl p-4 relative">
+                        <div class="ranking-badge bg-gradient-to-r from-cyan-400 to-blue-500 text-white absolute -top-3 -left-3">4</div>
+                        <div class="flex items-center gap-3">
+                            <div class="flex items-center gap-2">
+                                <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=32&h=32&fit=crop&crop=face" 
+                                     class="w-8 h-8 rounded-full object-cover" alt="摄影师头像">
+                                <span class="text-gray-400 text-xs">×</span>
+                                <img src="https://images.unsplash.com/photo-1599566150163-29194dcaad36?w=32&h=32&fit=crop&crop=face" 
+                                     class="w-8 h-8 rounded-full object-cover" alt="厨师头像">
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <div class="text-sm font-bold text-gray-800 truncate">摄影师 × 厨师</div>
+                                <div class="text-xs text-gray-500">1.2k 浏览</div>
+                            </div>
+                            <div class="trend-badge trend-up">
+                                <i class="fas fa-arrow-up"></i>
+                                上升
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="glass-card rounded-2xl p-4 relative">
+                        <div class="ranking-badge bg-gradient-to-r from-purple-400 to-pink-500 text-white absolute -top-3 -left-3">5</div>
+                        <div class="flex items-center gap-3">
+                            <div class="flex items-center gap-2">
+                                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=32&h=32&fit=crop&crop=face" 
+                                     class="w-8 h-8 rounded-full object-cover">
+                                <span class="text-gray-400 text-xs">×</span>
+                                <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=32&h=32&fit=crop&crop=face" 
+                                     class="w-8 h-8 rounded-full object-cover">
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <div class="text-sm font-bold text-gray-800 truncate">建筑师 × 园艺师</div>
+                                <div class="text-xs text-gray-500">1.0k 浏览</div>
+                            </div>
+                            <div class="trend-badge trend-new">
+                                <i class="fas fa-star"></i>
+                                新秀
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="glass-card rounded-2xl p-4 relative">
+                        <div class="ranking-badge bg-gradient-to-r from-emerald-400 to-green-500 text-white absolute -top-3 -left-3">6</div>
+                        <div class="flex items-center gap-3">
+                            <div class="flex items-center gap-2">
+                                <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?w=32&h=32&fit=crop&crop=face" 
+                                     class="w-8 h-8 rounded-full object-cover">
+                                <span class="text-gray-400 text-xs">×</span>
+                                <img src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?w=32&h=32&fit=crop&crop=face" 
+                                     class="w-8 h-8 rounded-full object-cover">
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <div class="text-sm font-bold text-gray-800 truncate">插画师 × 机械师</div>
+                                <div class="text-xs text-gray-500">890 浏览</div>
+                            </div>
+                            <div class="trend-badge trend-new">
+                                <i class="fas fa-star"></i>
+                                新秀
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 实时数据 -->
+            <div class="glass-card rounded-2xl p-5">
+                <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
+                    <i class="fas fa-chart-line text-indigo-500"></i>
+                    实时数据
+                </h3>
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between">
+                        <span class="text-sm text-gray-600">今日新配对</span>
+                        <span class="font-bold text-indigo-600 text-lg">127</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span class="text-sm text-gray-600">活跃用户</span>
+                        <span class="font-bold text-green-600 text-lg">2,340</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span class="text-sm text-gray-600">分享内容</span>
+                        <span class="font-bold text-orange-600 text-lg">89</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 右侧内容区域 -->
+        <div class="flex-1 p-8 overflow-y-auto">
+            <!-- 今日精选配对 -->
+            <div class="mb-8">
+                <div class="glass-card rounded-3xl p-8 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white relative overflow-hidden">
+                    <div class="absolute inset-0 bg-black/10"></div>
+                    <div class="relative z-10">
+                        <div class="text-center mb-6">
+                            <h2 class="text-2xl font-bold mb-2">✨ 今日最神奇配对</h2>
+                            <p class="text-white/90">跨界学习，发现无限可能</p>
+                        </div>
+                        
+                        <div class="flex items-center justify-center gap-12">
+                            <div class="text-center">
+                                <div class="relative mb-4">
+                                    <img src="https://images.unsplash.com/photo-1511367461989-f85a21fda167?w=100&h=100&fit=crop&crop=face" 
+                                         class="w-24 h-24 rounded-3xl object-cover mx-auto border-4 border-white/30">
+                                    <div class="absolute -bottom-2 -right-2 w-8 h-8 bg-gradient-to-r from-pink-400 to-purple-500 rounded-full flex items-center justify-center border-2 border-white">
+                                        <i class="fas fa-microphone text-white text-xs"></i>
+                                    </div>
+                                </div>
+                                <div class="font-bold text-lg">歌手小杰</div>
+                                <div class="text-white/80 text-sm">流行音乐创作人</div>
+                                <div class="text-white/60 text-xs mt-1">5年舞台经验</div>
+                            </div>
+                            
+                            <div class="flex flex-col items-center">
+                                <div class="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mb-2 animate-pulse">
+                                    <i class="fas fa-exchange-alt text-white text-2xl"></i>
+                                </div>
+                                <div class="text-sm font-medium">学习交流</div>
+                                <div class="text-xs text-white/70 mt-1">跨界合作</div>
+                            </div>
+                            
+                            <div class="text-center">
+                                <div class="relative mb-4">
+                                    <img src="https://images.unsplash.com/photo-1582750433449-648ed127bb54?w=100&h=100&fit=crop&crop=face" 
+                                         class="w-24 h-24 rounded-3xl object-cover mx-auto border-4 border-white/30">
+                                    <div class="absolute -bottom-2 -right-2 w-8 h-8 bg-gradient-to-r from-orange-400 to-yellow-500 rounded-full flex items-center justify-center border-2 border-white">
+                                        <i class="fas fa-bread-slice text-white text-xs"></i>
+                                    </div>
+                                </div>
+                                <div class="font-bold text-lg">面包师阿明</div>
+                                <div class="text-white/80 text-sm">烘焙工艺大师</div>
+                                <div class="text-white/60 text-xs mt-1">15年手艺传承</div>
+                            </div>
+                        </div>
+                        
+                        <div class="text-center mt-6">
+                            <p class="text-white/90 mb-4">"用音乐节奏来理解发面时间，创作灵感与手工艺的完美结合"</p>
+                            <div class="flex gap-2 justify-center mb-4">
+                                <span class="px-4 py-2 bg-white/20 backdrop-blur-xl rounded-full text-sm font-medium">跨界创新</span>
+                                <span class="px-4 py-2 bg-white/20 backdrop-blur-xl rounded-full text-sm font-medium">音乐烘焙</span>
+                                <span class="px-4 py-2 bg-white/20 backdrop-blur-xl rounded-full text-sm font-medium">节奏感</span>
+                            </div>
+                            <div class="flex gap-3 justify-center">
+                                <button class="px-8 py-3 bg-white text-purple-600 rounded-xl font-medium hover:bg-gray-100 transition-all shadow-lg">
+                                    了解详情 <i class="fas fa-arrow-right ml-2"></i>
+                                </button>
+                                <button class="px-8 py-3 bg-white/20 backdrop-blur-xl border border-white/30 text-white rounded-xl font-medium hover:bg-white/30 transition-all">
+                                    <i class="fas fa-heart mr-2"></i>
+                                    关注配对
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 社区动态 -->
+            <div class="mb-6">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-xl font-bold text-gray-800">社区动态</h2>
+                    <div class="flex gap-2">
+                        <button class="px-4 py-2 bg-indigo-100 text-indigo-600 rounded-xl font-medium text-sm">最新</button>
+                        <button class="px-4 py-2 bg-gray-100 text-gray-600 rounded-xl font-medium text-sm hover:bg-gray-200">热门</button>
+                        <button class="px-4 py-2 bg-gray-100 text-gray-600 rounded-xl font-medium text-sm hover:bg-gray-200">关注</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 动态网格 -->
+            <div class="feed-grid">
+                <!-- 师徒配对动态卡片1 - 双人头像 -->
+                <div class="content-card glass-card rounded-2xl p-6 border-l-4 border-purple-400">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="flex items-center gap-2">
+                            <!-- 师傅头像 -->
+                            <div class="relative">
+                                <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=48&h=48&fit=crop&crop=face" 
+                                     class="w-10 h-10 rounded-xl object-cover border-2 border-orange-300" alt="厨师师傅">
+                                <div class="absolute -top-1 -right-1 w-4 h-4 bg-orange-500 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-utensils text-white text-xs"></i>
+                                </div>
+                            </div>
+                            <span class="text-gray-400 text-sm">×</span>
+                            <!-- 徒弟头像 -->
+                            <div class="relative">
+                                <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?w=48&h=48&fit=crop&crop=face" 
+                                     class="w-10 h-10 rounded-xl object-cover border-2 border-purple-300" alt="设计师小李">
+                                <div class="absolute -top-1 -right-1 w-4 h-4 bg-purple-500 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-paintbrush text-white text-xs"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <span class="font-semibold text-gray-800">厨师师傅 × 设计师小李</span>
+                                <span class="text-xs bg-gradient-to-r from-orange-100 to-purple-100 text-gray-700 px-2 py-1 rounded-full">师徒配对</span>
+                            </div>
+                            <div class="text-xs text-gray-500">3分钟前 · 跨界学习</div>
+                        </div>
+                    </div>
+                    <div class="bg-gradient-to-r from-orange-50 to-purple-50 rounded-xl p-3 mb-3">
+                        <div class="text-sm font-medium text-gray-800 mb-1">🔥 师徒学习成果</div>
+                        <p class="text-sm text-gray-700 leading-relaxed">师傅的刀工节奏启发了我的界面动效设计！每一刀的停顿和流畅，就像动画的缓动函数 ✨</p>
+                    </div>
+                    <div class="relative rounded-xl overflow-hidden mb-4">
+                        <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=200&fit=crop" 
+                             class="w-full h-32 object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+                        <div class="absolute bottom-3 left-3 text-white text-sm font-medium">
+                            刀工与动效的艺术融合
+                        </div>
+                        <div class="absolute top-3 right-3">
+                            <div class="bg-gradient-to-r from-orange-500 to-purple-500 text-white px-2 py-1 rounded-full text-xs font-medium">
+                                <i class="fas fa-star mr-1"></i>师徒精选
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <div class="flex gap-2">
+                            <span class="px-3 py-1 bg-orange-100 text-orange-700 rounded-full text-xs font-medium">厨艺刀工</span>
+                            <span class="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-xs font-medium">UI动效</span>
+                            <span class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs font-medium">跨界创新</span>
+                        </div>
+                        <div class="flex items-center gap-4 text-xs text-gray-500">
+                            <button class="hover:text-red-500 transition-colors"><i class="far fa-heart mr-1"></i>89</button>
+                            <button class="hover:text-blue-500 transition-colors"><i class="far fa-comment mr-1"></i>23</button>
+                            <button class="hover:text-green-500 transition-colors"><i class="fas fa-share mr-1"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 多人学习小组动态 -->
+                <div class="content-card glass-card rounded-2xl p-6 border-l-4 border-blue-400">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="flex items-center gap-1">
+                            <!-- 多人头像堆叠 -->
+                            <div class="flex -space-x-2">
+                                <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=40&h=40&fit=crop&crop=face" 
+                                     class="w-8 h-8 rounded-full object-cover border-2 border-white bg-blue-100 z-30">
+                                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=40&h=40&fit=crop&crop=face" 
+                                     class="w-8 h-8 rounded-full object-cover border-2 border-white bg-green-100 z-20">
+                                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face" 
+                                     class="w-8 h-8 rounded-full object-cover border-2 border-white bg-orange-100 z-10">
+                                <div class="w-8 h-8 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 border-2 border-white flex items-center justify-center z-0">
+                                    <span class="text-white text-xs font-bold">+2</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <span class="font-semibold text-gray-800">跨界学习小组</span>
+                                <span class="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded-full">5人小组</span>
+                            </div>
+                            <div class="text-xs text-gray-500">15分钟前 · 协作学习</div>
+                        </div>
+                    </div>
+                    <p class="text-sm text-gray-700 mb-4 leading-relaxed">今天我们5个人的跨界小组完成了第一个合作项目！程序员×建筑师×咖啡师×书法家×音乐家，每个人都带来了独特的视角 🎭</p>
+                    <div class="grid grid-cols-5 gap-2 mb-4">
+                        <div class="text-center">
+                            <div class="w-12 h-12 mx-auto mb-2 relative">
+                                <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=48&h=48&fit=crop&crop=face" 
+                                     class="w-full h-full rounded-lg object-cover">
+                                <div class="absolute -bottom-1 -right-1 w-5 h-5 bg-blue-500 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-code text-white text-xs"></i>
+                                </div>
+                            </div>
+                            <div class="text-xs font-medium text-gray-700">程序员</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="w-12 h-12 mx-auto mb-2 relative">
+                                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=48&h=48&fit=crop&crop=face" 
+                                     class="w-full h-full rounded-lg object-cover">
+                                <div class="absolute -bottom-1 -right-1 w-5 h-5 bg-green-500 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-building text-white text-xs"></i>
+                                </div>
+                            </div>
+                            <div class="text-xs font-medium text-gray-700">建筑师</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="w-12 h-12 mx-auto mb-2 relative">
+                                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=48&h=48&fit=crop&crop=face" 
+                                     class="w-full h-full rounded-lg object-cover">
+                                <div class="absolute -bottom-1 -right-1 w-5 h-5 bg-orange-500 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-coffee text-white text-xs"></i>
+                                </div>
+                            </div>
+                            <div class="text-xs font-medium text-gray-700">咖啡师</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="w-12 h-12 mx-auto mb-2 relative">
+                                <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=48&h=48&fit=crop&crop=face" 
+                                     class="w-full h-full rounded-lg object-cover">
+                                <div class="absolute -bottom-1 -right-1 w-5 h-5 bg-gray-600 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-pen-fancy text-white text-xs"></i>
+                                </div>
+                            </div>
+                            <div class="text-xs font-medium text-gray-700">书法家</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="w-12 h-12 mx-auto mb-2 relative">
+                                <img src="https://images.unsplash.com/photo-1511367461989-f85a21fda167?w=48&h=48&fit=crop&crop=face" 
+                                     class="w-full h-full rounded-lg object-cover">
+                                <div class="absolute -bottom-1 -right-1 w-5 h-5 bg-purple-500 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-music text-white text-xs"></i>
+                                </div>
+                            </div>
+                            <div class="text-xs font-medium text-gray-700">音乐家</div>
+                        </div>
+                    </div>
+                    <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-3 mb-3">
+                        <div class="text-sm font-medium text-blue-800 mb-1">🚀 项目成果</div>
+                        <div class="text-xs text-blue-700 leading-relaxed">创作了一个"感官空间设计方案"：用代码构建3D空间，咖啡香气作为用户引导，书法美学定义视觉元素，音乐节奏控制交互流程。</div>
+                    </div>
+                    <div class="relative rounded-xl overflow-hidden mb-4">
+                        <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=400&h=200&fit=crop" 
+                             class="w-full h-32 object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
+                        <div class="absolute bottom-3 left-3 text-white">
+                            <div class="font-medium">感官空间设计方案</div>
+                            <div class="text-sm opacity-90">5人跨界协作成果</div>
+                        </div>
+                        <div class="absolute top-3 right-3">
+                            <div class="bg-gradient-to-r from-blue-500 to-indigo-500 text-white px-2 py-1 rounded-full text-xs font-medium">
+                                <i class="fas fa-users mr-1"></i>团队协作
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <div class="flex gap-2">
+                            <span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-medium">多人协作</span>
+                            <span class="px-3 py-1 bg-indigo-100 text-indigo-700 rounded-full text-xs font-medium">创新项目</span>
+                        </div>
+                        <div class="flex items-center gap-4 text-xs text-gray-500">
+                            <button class="hover:text-red-500 transition-colors"><i class="far fa-heart mr-1"></i>156</button>
+                            <button class="hover:text-blue-500 transition-colors"><i class="far fa-comment mr-1"></i>42</button>
+                            <button class="hover:text-green-500 transition-colors"><i class="fas fa-share mr-1"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 动态卡片1 - 保留原有的单人动态 -->
+                <div class="content-card glass-card rounded-2xl p-6">
+                    <div class="flex items-center gap-3 mb-4">
+                        <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?w=48&h=48&fit=crop&crop=face" 
+                             class="w-12 h-12 rounded-xl object-cover border-2 border-purple-200" alt="设计师小李头像">
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <span class="font-semibold text-gray-800">设计师小李</span>
+                                <span class="text-xs bg-purple-100 text-purple-700 px-2 py-1 rounded-full">UI设计师</span>
+                            </div>
+                            <div class="text-xs text-gray-500">3分钟前</div>
+                        </div>
+                    </div>
+                    <p class="text-sm text-gray-700 mb-4 leading-relaxed">继续和厨师师傅的学习之旅，今天学习了摆盘美学，对我的布局设计有了新的启发！🍽️</p>
+                    <div class="relative rounded-xl overflow-hidden mb-4">
+                        <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=400&h=200&fit=crop" 
+                             class="w-full h-32 object-cover" alt="摆盘美学与界面布局">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+                        <div class="absolute bottom-3 left-3 text-white text-sm font-medium">
+                            摆盘美学与界面布局
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <div class="flex gap-2">
+                            <span class="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-xs font-medium">设计灵感</span>
+                            <span class="px-3 py-1 bg-orange-100 text-orange-700 rounded-full text-xs font-medium">厨艺学习</span>
+                        </div>
+                        <div class="flex items-center gap-4 text-xs text-gray-500">
+                            <button class="hover:text-red-500 transition-colors"><i class="far fa-heart mr-1"></i>23</button>
+                            <button class="hover:text-blue-500 transition-colors"><i class="far fa-comment mr-1"></i>8</button>
+                            <button class="hover:text-green-500 transition-colors"><i class="fas fa-share mr-1"></i></button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 动态卡片2 -->
+                <div class="content-card glass-card rounded-2xl p-6">
+                    <div class="flex items-center gap-3 mb-4">
+                        <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=48&h=48&fit=crop&crop=face" 
+                             class="w-12 h-12 rounded-xl object-cover border-2 border-blue-200" alt="程序员阿强头像">
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <span class="font-semibold text-gray-800">程序员阿强</span>
+                                <span class="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded-full">全栈工程师</span>
+                            </div>
+                            <div class="text-xs text-gray-500">15分钟前</div>
+                        </div>
+                    </div>
+                    <p class="text-sm text-gray-700 mb-4 leading-relaxed">跟书法老师学习字体结构，原来代码语法美学和书法有这么多共同点，哈哈 😄</p>
+                    <div class="relative rounded-xl overflow-hidden mb-3">
+                        <img src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=400&h=160&fit=crop" 
+                             class="w-full h-24 object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+                        <div class="absolute bottom-2 left-3 text-white">
+                            <div class="font-medium text-sm">代码书法艺术</div>
+                            <div class="text-xs opacity-90">逻辑与美学的完美结合</div>
+                        </div>
+                        <div class="absolute top-2 right-2">
+                            <div class="bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-2 py-1 rounded-full text-xs font-medium">
+                                <i class="fas fa-code mr-1"></i>代码美学
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-gradient-to-r from-blue-50 to-cyan-50 rounded-xl p-4 mb-4">
+                        <div class="text-sm text-blue-800 font-medium mb-2">💡 今日心得</div>
+                        <div class="text-xs text-blue-700 leading-relaxed">代码的缩进就像字的结构，都需要平衡美感与功能性。师傅说我的代码越来越有"书法味"了！</div>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <div class="flex gap-2">
+                            <span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-medium">编程艺术</span>
+                            <span class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs font-medium">书法</span>
+                        </div>
+                        <div class="flex items-center gap-4 text-xs text-gray-500">
+                            <button class="hover:text-red-500 transition-colors"><i class="far fa-heart mr-1"></i>45</button>
+                            <button class="hover:text-blue-500 transition-colors"><i class="far fa-comment mr-1"></i>12</button>
+                            <button class="hover:text-green-500 transition-colors"><i class="fas fa-share mr-1"></i></button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 师徒教学动态 - 咖啡师×律师 -->
+                <div class="content-card glass-card rounded-2xl p-6 border-l-4 border-orange-400">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="flex items-center gap-2">
+                            <!-- 师傅头像 -->
+                            <div class="relative">
+                                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=48&h=48&fit=crop&crop=face" 
+                                     class="w-10 h-10 rounded-xl object-cover border-2 border-orange-300" alt="咖啡师阿力">
+                                <div class="absolute -top-1 -right-1 w-4 h-4 bg-orange-500 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-coffee text-white text-xs"></i>
+                                </div>
+                            </div>
+                            <span class="text-gray-400 text-sm">教</span>
+                            <!-- 徒弟头像 -->
+                            <div class="relative">
+                                <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=48&h=48&fit=crop&crop=face" 
+                                     class="w-10 h-10 rounded-xl object-cover border-2 border-blue-300" alt="律师小张">
+                                <div class="absolute -top-1 -right-1 w-4 h-4 bg-blue-500 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-balance-scale text-white text-xs"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <span class="font-semibold text-gray-800">咖啡师阿力 教 律师小张</span>
+                                <span class="text-xs bg-gradient-to-r from-orange-100 to-blue-100 text-gray-700 px-2 py-1 rounded-full">师徒教学</span>
+                            </div>
+                            <div class="text-xs text-gray-500">2小时前 · 实战教学</div>
+                        </div>
+                    </div>
+                    <div class="bg-gradient-to-r from-orange-50 to-blue-50 rounded-xl p-3 mb-3">
+                        <div class="text-sm font-medium text-gray-800 mb-1">📚 教学互动</div>
+                        <p class="text-sm text-gray-700 leading-relaxed">没想到法律逻辑思维用在咖啡制作流程上这么有效！每个步骤都像在构建法律论证 ⚖️</p>
+                    </div>
+                    <div class="relative rounded-xl overflow-hidden mb-4">
+                        <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=400&h=300&fit=crop" 
+                             class="w-full h-40 object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+                        <div class="absolute bottom-3 left-3">
+                            <div class="text-white font-medium">逻辑思维 × 拉花艺术</div>
+                            <div class="text-white/80 text-sm">师徒教学现场</div>
+                        </div>
+                        <div class="absolute top-3 right-3">
+                            <div class="bg-gradient-to-r from-orange-500 to-blue-500 text-white px-2 py-1 rounded-full text-xs font-medium">
+                                <i class="fas fa-fire mr-1"></i>热门教学
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <div class="flex gap-2">
+                            <span class="px-3 py-1 bg-orange-100 text-orange-700 rounded-full text-xs font-medium">咖啡艺术</span>
+                            <span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-medium">逻辑思维</span>
+                            <span class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs font-medium">师徒教学</span>
+                        </div>
+                        <div class="flex items-center gap-4 text-xs text-gray-500">
+                            <button class="hover:text-red-500 transition-colors"><i class="far fa-heart mr-1"></i>134</button>
+                            <button class="hover:text-blue-500 transition-colors"><i class="far fa-comment mr-1"></i>28</button>
+                            <button class="hover:text-green-500 transition-colors"><i class="fas fa-share mr-1"></i></button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 三人协作拍摄项目 -->
+                <div class="content-card glass-card rounded-2xl p-6 border-l-4 border-pink-400">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="flex items-center gap-2">
+                            <!-- 三人头像组合 -->
+                            <div class="flex items-center gap-1">
+                                <div class="relative">
+                                    <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=32&h=32&fit=crop&crop=face" 
+                                         class="w-8 h-8 rounded-lg object-cover border border-pink-300" alt="摄影师小雯">
+                                    <div class="absolute -top-1 -right-1 w-3 h-3 bg-pink-500 rounded-full flex items-center justify-center">
+                                        <i class="fas fa-camera text-white text-xs"></i>
+                                    </div>
+                                </div>
+                                <span class="text-gray-400 text-xs">+</span>
+                                <div class="relative">
+                                    <img src="https://images.unsplash.com/photo-1594736797933-d0401ba3cd7d?w=32&h=32&fit=crop&crop=face" 
+                                         class="w-8 h-8 rounded-lg object-cover border border-purple-300" alt="舞蹈老师">
+                                    <div class="absolute -top-1 -right-1 w-3 h-3 bg-purple-500 rounded-full flex items-center justify-center">
+                                        <i class="fas fa-walking text-white text-xs"></i>
+                                    </div>
+                                </div>
+                                <span class="text-gray-400 text-xs">+</span>
+                                <div class="relative">
+                                    <img src="https://images.unsplash.com/photo-1599566150163-29194dcaad36?w=32&h=32&fit=crop&crop=face" 
+                                         class="w-8 h-8 rounded-lg object-cover border border-orange-300" alt="化妆师">
+                                    <div class="absolute -top-1 -right-1 w-3 h-3 bg-orange-500 rounded-full flex items-center justify-center">
+                                        <i class="fas fa-palette text-white text-xs"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <span class="font-semibold text-gray-800">摄影师×舞蹈师×化妆师</span>
+                                <span class="text-xs bg-gradient-to-r from-pink-100 via-purple-100 to-orange-100 text-gray-700 px-2 py-1 rounded-full">三人协作</span>
+                            </div>
+                            <div class="text-xs text-gray-500">6小时前 · 跨界合作拍摄</div>
+                        </div>
+                    </div>
+                    <div class="bg-gradient-to-r from-pink-50 via-purple-50 to-orange-50 rounded-xl p-3 mb-3">
+                        <div class="text-sm font-medium text-gray-800 mb-1">🎭 三方协作项目</div>
+                        <p class="text-sm text-gray-700 leading-relaxed">舞蹈老师的身体语言指导 + 化妆师的色彩搭配 + 我的摄影构图 = 完美的艺术作品！每个人的专业技能都得到了完美融合 💃</p>
+                    </div>
+                    <div class="grid grid-cols-3 gap-2 mb-4">
+                        <div class="relative">
+                            <img src="https://images.unsplash.com/photo-1554048612-b6ebf9c78c10?w=150&h=150&fit=crop" 
+                                 class="w-full h-20 rounded-lg object-cover">
+                            <div class="absolute top-1 left-1 bg-pink-500/80 text-white px-1 py-0.5 rounded text-xs">构图</div>
+                        </div>
+                        <div class="relative">
+                            <img src="https://images.unsplash.com/photo-1547036967-23d11aacaee0?w=150&h=150&fit=crop" 
+                                 class="w-full h-20 rounded-lg object-cover">
+                            <div class="absolute top-1 left-1 bg-purple-500/80 text-white px-1 py-0.5 rounded text-xs">动作</div>
+                        </div>
+                        <div class="relative">
+                            <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=150&h=150&fit=crop" 
+                                 class="w-full h-20 rounded-lg object-cover">
+                            <div class="absolute top-1 left-1 bg-orange-500/80 text-white px-1 py-0.5 rounded text-xs">造型</div>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <div class="flex gap-2">
+                            <span class="px-3 py-1 bg-pink-100 text-pink-700 rounded-full text-xs font-medium">摄影艺术</span>
+                            <span class="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-xs font-medium">舞蹈美学</span>
+                            <span class="px-3 py-1 bg-orange-100 text-orange-700 rounded-full text-xs font-medium">化妆造型</span>
+                        </div>
+                        <div class="flex items-center gap-4 text-xs text-gray-500">
+                            <button class="hover:text-red-500 transition-colors"><i class="far fa-heart mr-1"></i>218</button>
+                            <button class="hover:text-blue-500 transition-colors"><i class="far fa-comment mr-1"></i>45</button>
+                            <button class="hover:text-green-500 transition-colors"><i class="fas fa-share mr-1"></i></button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 动态卡片5 -->
+                <div class="content-card glass-card rounded-2xl p-6">
+                    <div class="flex items-center gap-3 mb-4">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=48&h=48&fit=crop&crop=face" 
+                             class="w-12 h-12 rounded-xl object-cover border-2 border-green-200" alt="建筑师老王头像">
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <span class="font-semibold text-gray-800">建筑师老王</span>
+                                <span class="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full">高级建筑师</span>
+                            </div>
+                            <div class="text-xs text-gray-500">4小时前</div>
+                        </div>
+                    </div>
+                    <p class="text-sm text-gray-700 mb-4 leading-relaxed">向园艺师学习植物搭配，发现空间设计和植物布局的相似之处，都需要考虑生长和变化。大自然就是最好的老师 🌱</p>
+                    <div class="relative rounded-xl overflow-hidden mb-4">
+                        <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=400&h=200&fit=crop" 
+                             class="w-full h-32 object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
+                        <div class="absolute bottom-2 left-3 text-white text-sm font-medium">
+                            建筑与园艺的和谐统一
+                        </div>
+                    </div>
+                    <div class="relative rounded-xl overflow-hidden mb-3">
+                        <img src="https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=400&h=160&fit=crop" 
+                             class="w-full h-24 object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+                        <div class="absolute bottom-2 left-3 text-white">
+                            <div class="font-medium text-sm">生态建筑设计</div>
+                            <div class="text-xs opacity-90">绿色空间美学理念</div>
+                        </div>
+                        <div class="absolute top-2 right-2">
+                            <div class="bg-gradient-to-r from-green-500 to-emerald-500 text-white px-2 py-1 rounded-full text-xs font-medium">
+                                <i class="fas fa-leaf mr-1"></i>生态设计
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl p-3 mb-4">
+                        <div class="text-sm text-green-800 font-medium mb-1">💡 学习心得</div>
+                        <div class="text-xs text-green-700 leading-relaxed">空间布局如植物生长，需要预留发展空间，考虑光照、通风和美观的平衡。</div>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <div class="flex gap-2">
+                            <span class="px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-medium">园艺设计</span>
+                            <span class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs font-medium">空间美学</span>
+                        </div>
+                        <div class="flex items-center gap-4 text-xs text-gray-500">
+                            <button class="hover:text-red-500 transition-colors"><i class="far fa-heart mr-1"></i>34</button>
+                            <button class="hover:text-blue-500 transition-colors"><i class="far fa-comment mr-1"></i>9</button>
+                            <button class="hover:text-green-500 transition-colors"><i class="fas fa-share mr-1"></i></button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 技能互换动态 - 花艺师×数据分析师 -->
+                <div class="content-card glass-card rounded-2xl p-6 border-l-4 border-indigo-400">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="flex items-center gap-2">
+                            <!-- 双向交换图标 -->
+                            <div class="relative">
+                                <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=40&h=40&fit=crop&crop=face" 
+                                     class="w-9 h-9 rounded-lg object-cover border-2 border-indigo-300" alt="花艺师小美">
+                                <div class="absolute -top-1 -right-1 w-3 h-3 bg-indigo-500 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-seedling text-white text-xs"></i>
+                                </div>
+                            </div>
+                            <div class="flex flex-col items-center mx-1">
+                                <i class="fas fa-exchange-alt text-gray-400 text-sm"></i>
+                                <span class="text-xs text-gray-500">互换</span>
+                            </div>
+                            <div class="relative">
+                                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=40&h=40&fit=crop&crop=face" 
+                                     class="w-9 h-9 rounded-lg object-cover border-2 border-blue-300" alt="数据分析师">
+                                <div class="absolute -top-1 -right-1 w-3 h-3 bg-blue-500 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-chart-bar text-white text-xs"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <span class="font-semibold text-gray-800">花艺师小美 ⇄ 数据分析师</span>
+                                <span class="text-xs bg-gradient-to-r from-indigo-100 to-blue-100 text-gray-700 px-2 py-1 rounded-full">技能互换</span>
+                            </div>
+                            <div class="text-xs text-gray-500">8小时前 · 双向学习</div>
+                        </div>
+                    </div>
+                    <div class="bg-gradient-to-r from-indigo-50 to-blue-50 rounded-xl p-3 mb-3">
+                        <div class="text-sm font-medium text-gray-800 mb-1">🔄 技能交换成果</div>
+                        <p class="text-sm text-gray-700 leading-relaxed">我教他花艺搭配的色彩理论，他教我用数据分析花卉生长规律。没想到数字也能这么浪漫！📊🌸</p>
+                    </div>
+                    <div class="relative rounded-xl overflow-hidden mb-3">
+                        <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=160&fit=crop" 
+                             class="w-full h-24 object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+                        <div class="absolute bottom-2 left-3 text-white">
+                            <div class="font-medium text-sm">花艺数据可视化</div>
+                            <div class="text-xs opacity-90">艺术与科技的完美结合</div>
+                        </div>
+                        <div class="absolute top-2 right-2">
+                            <div class="bg-gradient-to-r from-indigo-500 to-blue-500 text-white px-2 py-1 rounded-full text-xs font-medium">
+                                <i class="fas fa-exchange-alt mr-1"></i>技能融合
+                            </div>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-3 mb-4">
+                        <div class="bg-indigo-50 rounded-lg p-3">
+                            <div class="text-sm font-medium text-indigo-800 mb-2">🌸 花期数据分析</div>
+                            <div class="grid grid-cols-2 gap-2 text-xs">
+                                <div class="text-center">
+                                    <div class="font-bold text-indigo-600">87%</div>
+                                    <div class="text-indigo-500">开花率</div>
+                                </div>
+                                <div class="text-center">
+                                    <div class="font-bold text-pink-600">21天</div>
+                                    <div class="text-pink-500">平均花期</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-blue-50 rounded-lg p-3">
+                            <div class="text-sm font-medium text-blue-800 mb-2">🎨 色彩算法应用</div>
+                            <div class="text-xs text-blue-700">将花艺配色原理编写成算法，自动生成最佳搭配方案</div>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <div class="flex gap-2">
+                            <span class="px-3 py-1 bg-indigo-100 text-indigo-700 rounded-full text-xs font-medium">花艺设计</span>
+                            <span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-medium">数据分析</span>
+                            <span class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs font-medium">技能互换</span>
+                        </div>
+                        <div class="flex items-center gap-4 text-xs text-gray-500">
+                            <button class="hover:text-red-500 transition-colors"><i class="far fa-heart mr-1"></i>95</button>
+                            <button class="hover:text-blue-500 transition-colors"><i class="far fa-comment mr-1"></i>22</button>
+                            <button class="hover:text-green-500 transition-colors"><i class="fas fa-share mr-1"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 师傅带多徒弟动态 -->
+                <div class="content-card glass-card rounded-2xl p-6 border-l-4 border-green-400">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="flex items-center gap-2">
+                            <!-- 师傅头像 -->
+                            <div class="relative">
+                                <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=40&h=40&fit=crop&crop=face" 
+                                     class="w-10 h-10 rounded-xl object-cover border-2 border-green-300" alt="资深厨师师傅">
+                                <div class="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-crown text-white text-xs"></i>
+                                </div>
+                            </div>
+                            <span class="text-gray-400 text-sm">→</span>
+                            <!-- 多个徒弟头像堆叠 -->
+                            <div class="flex -space-x-1">
+                                <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?w=32&h=32&fit=crop&crop=face" 
+                                     class="w-7 h-7 rounded-full object-cover border-2 border-white z-30" alt="徒弟1">
+                                <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=32&h=32&fit=crop&crop=face" 
+                                     class="w-7 h-7 rounded-full object-cover border-2 border-white z-20" alt="徒弟2">
+                                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=32&h=32&fit=crop&crop=face" 
+                                     class="w-7 h-7 rounded-full object-cover border-2 border-white z-10" alt="徒弟3">
+                                <div class="w-7 h-7 rounded-full bg-gradient-to-r from-green-400 to-blue-500 border-2 border-white flex items-center justify-center z-0">
+                                    <span class="text-white text-xs font-bold">+4</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <span class="font-semibold text-gray-800">资深厨师师傅 带 7位徒弟</span>
+                                <span class="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full">1带多教学</span>
+                            </div>
+                            <div class="text-xs text-gray-500">1小时前 · 集体教学</div>
+                        </div>
+                    </div>
+                    <div class="bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl p-3 mb-3">
+                        <div class="text-sm font-medium text-gray-800 mb-1">👨‍🍳 集体教学课堂</div>
+                        <p class="text-sm text-gray-700 leading-relaxed">今天的刀工集训课，7个不同职业的徒弟一起学习！设计师、程序员、咖啡师、律师、摄影师、建筑师、音乐家，每个人都有不同的理解角度</p>
+                    </div>
+                    <div class="relative rounded-xl overflow-hidden mb-3">
+                        <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=400&h=180&fit=crop" 
+                             class="w-full h-28 object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+                        <div class="absolute bottom-2 left-3 text-white">
+                            <div class="font-medium text-sm">7人刀工集训课</div>
+                            <div class="text-xs opacity-90">跨职业学习现场</div>
+                        </div>
+                        <div class="absolute top-2 right-2">
+                            <div class="bg-gradient-to-r from-green-500 to-emerald-500 text-white px-2 py-1 rounded-full text-xs font-medium">
+                                <i class="fas fa-chalkboard-teacher mr-1"></i>集训
+                            </div>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-4 gap-2 mb-4">
+                        <div class="text-center">
+                            <div class="w-10 h-10 mx-auto mb-1 relative">
+                                <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?w=40&h=40&fit=crop&crop=face" 
+                                     class="w-full h-full rounded-lg object-cover">
+                                <div class="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-purple-500 rounded-full"></div>
+                            </div>
+                            <div class="text-xs font-medium text-gray-700">设计师</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="w-10 h-10 mx-auto mb-1 relative">
+                                <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=40&h=40&fit=crop&crop=face" 
+                                     class="w-full h-full rounded-lg object-cover">
+                                <div class="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-blue-500 rounded-full"></div>
+                            </div>
+                            <div class="text-xs font-medium text-gray-700">程序员</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="w-10 h-10 mx-auto mb-1 relative">
+                                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face" 
+                                     class="w-full h-full rounded-lg object-cover">
+                                <div class="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-orange-500 rounded-full"></div>
+                            </div>
+                            <div class="text-xs font-medium text-gray-700">咖啡师</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="w-10 h-10 mx-auto mb-1 bg-gradient-to-r from-green-400 to-blue-500 rounded-lg flex items-center justify-center">
+                                <span class="text-white text-xs font-bold">+4</span>
+                            </div>
+                            <div class="text-xs font-medium text-gray-700">更多</div>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <div class="flex gap-2">
+                            <span class="px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-medium">厨艺教学</span>
+                            <span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-medium">集体学习</span>
+                            <span class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs font-medium">跨界课堂</span>
+                        </div>
+                        <div class="flex items-center gap-4 text-xs text-gray-500">
+                            <button class="hover:text-red-500 transition-colors"><i class="far fa-heart mr-1"></i>178</button>
+                            <button class="hover:text-blue-500 transition-colors"><i class="far fa-comment mr-1"></i>34</button>
+                            <button class="hover:text-green-500 transition-colors"><i class="fas fa-share mr-1"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 跨界创新项目 -->
+                <div class="content-card glass-card rounded-2xl p-6 border-l-4 border-yellow-400">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="flex items-center gap-1">
+                            <!-- 项目团队头像 -->
+                            <div class="grid grid-cols-2 gap-1">
+                                <div class="relative">
+                                    <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=24&h=24&fit=crop&crop=face" 
+                                         class="w-6 h-6 rounded object-cover border border-pink-300">
+                                    <div class="absolute -top-0.5 -right-0.5 w-2 h-2 bg-pink-500 rounded-full"></div>
+                                </div>
+                                <div class="relative">
+                                    <img src="https://images.unsplash.com/photo-1511367461989-f85a21fda167?w=24&h=24&fit=crop&crop=face" 
+                                         class="w-6 h-6 rounded object-cover border border-purple-300">
+                                    <div class="absolute -top-0.5 -right-0.5 w-2 h-2 bg-purple-500 rounded-full"></div>
+                                </div>
+                                <div class="relative">
+                                    <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=24&h=24&fit=crop&crop=face" 
+                                         class="w-6 h-6 rounded object-cover border border-indigo-300">
+                                    <div class="absolute -top-0.5 -right-0.5 w-2 h-2 bg-indigo-500 rounded-full"></div>
+                                </div>
+                                <div class="w-6 h-6 rounded bg-gradient-to-r from-yellow-400 to-orange-500 flex items-center justify-center border border-yellow-300">
+                                    <span class="text-white text-xs font-bold">+</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <span class="font-semibold text-gray-800">跨界创新实验室</span>
+                                <span class="text-xs bg-gradient-to-r from-yellow-100 to-orange-100 text-gray-700 px-2 py-1 rounded-full">创新项目</span>
+                            </div>
+                            <div class="text-xs text-gray-500">4小时前 · 摄影×音乐×花艺×数据</div>
+                        </div>
+                    </div>
+                    <div class="bg-gradient-to-r from-yellow-50 to-orange-50 rounded-xl p-3 mb-3">
+                        <div class="text-sm font-medium text-gray-800 mb-1">🚀 创新成果发布</div>
+                        <p class="text-sm text-gray-700 leading-relaxed">我们四人团队完成了"数据可视化艺术装置"项目！用音乐节拍驱动数据变化，花艺色彩映射数据维度，摄影技术记录动态美感</p>
+                    </div>
+                    <div class="relative rounded-xl overflow-hidden mb-4">
+                        <img src="https://images.unsplash.com/photo-1551434678-e076c223a692?w=400&h=200&fit=crop" 
+                             class="w-full h-32 object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
+                        <div class="absolute bottom-3 left-3 text-white">
+                            <div class="font-medium">数据艺术装置作品</div>
+                            <div class="text-sm opacity-90">四维融合创新项目</div>
+                        </div>
+                        <div class="absolute top-3 right-3">
+                            <div class="bg-gradient-to-r from-yellow-500 to-orange-500 text-white px-2 py-1 rounded-full text-xs font-medium">
+                                <i class="fas fa-rocket mr-1"></i>创新项目
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <div class="flex gap-1 flex-wrap">
+                            <span class="px-2 py-1 bg-pink-100 text-pink-700 rounded-full text-xs font-medium">摄影艺术</span>
+                            <span class="px-2 py-1 bg-purple-100 text-purple-700 rounded-full text-xs font-medium">音乐节拍</span>
+                            <span class="px-2 py-1 bg-indigo-100 text-indigo-700 rounded-full text-xs font-medium">花艺色彩</span>
+                            <span class="px-2 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-medium">数据可视化</span>
+                        </div>
+                        <div class="flex items-center gap-4 text-xs text-gray-500">
+                            <button class="hover:text-red-500 transition-colors"><i class="far fa-heart mr-1"></i>267</button>
+                            <button class="hover:text-blue-500 transition-colors"><i class="far fa-comment mr-1"></i>56</button>
+                            <button class="hover:text-green-500 transition-colors"><i class="fas fa-share mr-1"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 浮动发布按钮 -->
+    <div class="floating-btn">
+        <button class="w-14 h-14 bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded-full shadow-lg flex items-center justify-center hover:shadow-xl transition-all">
+            <i class="fas fa-plus text-xl"></i>
+        </button>
+    </div>
+</body>
+</html> 
